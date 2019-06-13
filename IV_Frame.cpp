@@ -2,9 +2,11 @@
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
 #include "../sample.xpm"
-#include "IV_ImgManager.h"
-
 #endif
+
+#include "IV_ImgManager.h"
+#include "IV_toolbar.h"
+#include "IV_imgSwitcher.h"
 
 enum
 {
@@ -21,8 +23,10 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 wxBEGIN_EVENT_TABLE(IV_Frame, wxFrame)
+	EVT_CLOSE(IV_Frame::OnClose)
 	EVT_SIZE(IV_Frame::OnResize)
     EVT_PAINT(IV_Frame::OnPaint)
+
     EVT_MENU(Minimal_About, IV_Frame::OnAbout)
 wxEND_EVENT_TABLE()
 
@@ -33,7 +37,9 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 IV_Frame::IV_Frame()
-        : wxFrame(NULL, wxID_ANY,"ImageViewer")
+        : wxFrame(NULL, wxID_ANY,"ImageViewer"),
+		  toolbar(this),
+		  imgSwitcher(this)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -44,7 +50,9 @@ IV_Frame::IV_Frame()
 	refresh();
 }
 IV_Frame::IV_Frame(const wxString path)
-        : wxFrame(NULL, wxID_ANY,path)
+        : wxFrame(NULL, wxID_ANY,path),
+		  toolbar(this),
+		  imgSwitcher(this)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -57,7 +65,15 @@ IV_Frame::IV_Frame(const wxString path)
 }
 
 // event handlers
-void IV_Frame::OnResize(wxSizeEvent& event){
+void IV_Frame::OnClose(wxCloseEvent &event){
+	if(imgManager!= nullptr){
+		delete imgManager;
+	}
+	if(screenCache!= nullptr){
+		delete screenCache;
+	}
+}
+void IV_Frame::OnResize(wxSizeEvent &event){
 	delete screenCache;
 	screenCache=new wxBitmap(GetClientSize(),32);
 	refresh();
@@ -67,14 +83,7 @@ void IV_Frame::OnPaint(wxPaintEvent &event) {
     paintDC.Clear();
     paintDC.DrawBitmap(*screenCache,0,0,false);
 }
-void IV_Frame::OnClose(wxCommandEvent &event) {
-	if(imgManager!= nullptr){
-		delete imgManager;
-	}
-	if(screenCache!= nullptr){
-		delete screenCache;
-	}
-}
+
 void IV_Frame::OnOpenFile(wxCommandEvent &event) {
 	wxString path;
 	path = wxLoadFileSelector("image", wxEmptyString);
@@ -96,24 +105,20 @@ void IV_Frame::OnMouseScroll(wxMouseEvent& event){
 	if(mode==GUIDE){
 		//do nothing
 	}else if(mode==IMAGE && imgManager->getStatus()==IV_ImgManager::STATUS::FINE){
-		//这个算法远远不够，应该做到的效果是以鼠标当前位置为中心进行放缩
-		double &zoom=imgManager->getCurrentImage().m_displayConf.zoom;
-		zoom+=event.m_wheelRotation/100.0;
-		if(zoom>10){
-			zoom=10;
-		}else if(zoom <0.1){
-			zoom=0.1;
+		IV_Image &image=imgManager->getCurrentImage();
+		if(image.m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
+			wxSize clientSize=GetClientSize();
+			wxPoint mousePos=event.GetPosition();
+			wxPoint dcenter(mousePos.x-clientSize.x/2.0,mousePos.y-clientSize.y/2.0);
+			image.zoomBy(1.0*event.m_wheelRotation/100,dcenter);
 		}
-		refresh();
 	}
 }
 void IV_Frame::OnMouseClick(wxMouseEvent& event){
 	if(mode==MODE::GUIDE){
 
 	}else if(mode==MODE::IMAGE){
-		if(正常){
-			bar.onMove(event)
-		}
+
 	}
 }
 void IV_Frame::OnKeyboard(wxKeyEvent& event){
@@ -134,10 +139,12 @@ void IV_Frame::OnAbout(wxCommandEvent& WXUNUSED(event))
                                  wxVERSION_STRING,
                                  wxGetOsDescription()
                          ),
-                 "About wxWidgets minimal sample",
+                 "About  ImgViewer",
                  wxOK | wxICON_INFORMATION,
                  this);
 }
+
+//私有方法
 void IV_Frame::OpenFile(wxString path){
 	IV_ImgManager *imgManagerTMP=new IV_ImgManager(path);
 	if(imgManagerTMP->getStatus()==IV_ImgManager::STATUS::FINE){
@@ -161,9 +168,9 @@ void IV_Frame::CloseFile(){
 	}
 }
 void IV_Frame::refresh() {
-	if(mode=MODE::GUIDE){
+	if(mode==MODE::GUIDE){
 
-	}else(mode=MODE::IMAGE){
+	}else{
 
 	}
 }

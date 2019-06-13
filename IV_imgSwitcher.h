@@ -13,9 +13,9 @@
 #endif
 
 
-class IV_imgSwithcer {
+class IV_imgSwitcher {
 public:
-	IV_imgSwithcer(wxFrame *parent);
+	IV_imgSwitcher(wxFrame *parent);
 	void OnClick(wxMouseEvent &event);
 	void OnMove(wxMouseEvent &event);
 	void OnPaint(wxMemoryDC &memDC);
@@ -29,6 +29,3 @@ private:
 	};
 	enum BUTTON hoveredButton;
 };
-
-
-#endif //IMGVIEWER_IV_PICSWITHCER_H

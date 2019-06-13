@@ -4,6 +4,7 @@
 IV_ImgManager::IV_ImgManager(wxString path){
 	imgTMP=new IV_Image(path);
 }
+IV_ImgManager::~IV_ImgManager() {}
 bool IV_ImgManager::hasLastImage(){return false;}
 bool IV_ImgManager::hasNextImage(){return false;}
 const enum IV_ImgManager::STATUS IV_ImgManager::getStatus(){ return STATUS ::FINE;}
@@ -12,4 +13,3 @@ IV_Image& IV_ImgManager::getCurrentImage(){return *imgTMP;}
 void IV_ImgManager::switch2Next(){}
 void IV_ImgManager::switch2Last(){}
 void IV_ImgManager::preload(){}	//preload函数要尽量地小，避免一次占用过多时间造成卡顿
-
