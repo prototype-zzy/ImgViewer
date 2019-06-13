@@ -24,8 +24,8 @@ enum
 // simple menu events like this the static method is much simpler.
 wxBEGIN_EVENT_TABLE(IV_Frame, wxFrame)
 	EVT_CLOSE(IV_Frame::OnClose)
-//	EVT_SIZE(IV_Frame::OnResize)
-//    EVT_PAINT(IV_Frame::paint2cache)
+	EVT_SIZE(IV_Frame::OnResize)
+    EVT_PAINT(IV_Frame::OnPaint)
 //
 //    EVT_MENU(Minimal_About, IV_Frame::OnAbout)
 wxEND_EVENT_TABLE()
@@ -80,9 +80,19 @@ void IV_Frame::OnResize(wxSizeEvent &event){
 	refresh();
 }
 void IV_Frame::OnPaint(wxPaintEvent &event) {
-    wxPaintDC paintDC(this);
-    paintDC.Clear();
-    paintDC.DrawBitmap(*screenCache,0,0,false);
+//	wxPaintDC dc(this);
+//	dc.SetPen(*wxYELLOW_PEN);
+//	dc.Clear();
+//	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);
+	wxClientDC dc(this);
+	dc.SetPen(*wxYELLOW_PEN);
+	dc.Clear();
+	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);
+
+
+//    wxPaintDC paintDC(this);
+//    paintDC.Clear();
+//    paintDC.DrawBitmap(*screenCache,0,0,false);
 }
 
 void IV_Frame::OnOpenFile(wxCommandEvent &event) {
@@ -171,8 +181,8 @@ void IV_Frame::CloseFile(){
 void IV_Frame::refresh() {
 	if(mode==MODE::GUIDE){
 
-	}else{
-//		wxLogMessage("123");
+	}else {
+		//wxLogMessage("123");
 ////		wxBitmap abc(300,300);
 ////		wxMemoryDC memDC(abc);
 ////		memDC.SetPen(*wxGREEN_PEN);
@@ -191,10 +201,5 @@ void IV_Frame::refresh() {
 ////			case IV_ImgManager::STATUS::ILLEGAL_PATH:
 ////				break;
 ////		}
-//		wxClientDC dc(this);
-//		dc.SetPen(wxPen(*wxYELLOW, 20));
-//		dc.DrawPoint(30,30);
-//		dc.SetPen(wxNullPen);
 	}
 }
-
