@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -11,9 +12,10 @@
 #include "wx/wx.h"
 #endif
 
-class IV_Toolbar {
+
+class IV_imgSwithcer {
 public:
-	IV_Toolbar(wxFrame *parent);
+	IV_imgSwithcer(wxFrame *parent);
 	void OnClick(wxMouseEvent &event);
 	void OnMove(wxMouseEvent &event);
 	void OnPaint(wxMemoryDC &memDC);
@@ -22,13 +24,11 @@ private:
 	bool isHovered;
 	enum BUTTON{
 		NONE,
-		ZOOM_IN,
-		ZOOM_OUT,
-		ZOOM_100,
-		ROTATE,
-		HORIZONTAL_MIRROR,
-		VERTICAL_MIRROR,
-		NEXT_IMG,
 		LAST_IMG,
+		NEXT_IMG
 	};
+	enum BUTTON hoveredButton;
 };
+
+
+#endif //IMGVIEWER_IV_PICSWITHCER_H
