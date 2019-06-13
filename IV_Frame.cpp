@@ -72,6 +72,7 @@ void IV_Frame::OnClose(wxCloseEvent &event){
 	if(screenCache!= nullptr){
 		delete screenCache;
 	}
+	Destroy();
 }
 void IV_Frame::OnResize(wxSizeEvent &event){
 	delete screenCache;
