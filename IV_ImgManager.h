@@ -1,0 +1,53 @@
+#pragma once
+
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
+
+#include "IV_Image.h"
+/*
+ * 要求这个类能够
+ * 管理多个VI_Image并且能够进行切换和缓存
+ * 在源文件发生变化的时候能够析构老的Image并加载新的Image
+ * 在文件夹文件目录发生改变的时候也需要重新排一下
+ */
+/*
+ * 之后成功了可以把这个累改成一个虚基类，分别实现积极预读和懒惰读取，看看哪种方案的效率更高，或者讲选择权交给用户
+ */
+class IV_ImgManager {
+public:
+	/*
+	 * 一个理想化的IV_ImgManager，只有1个构造函数，这个构造函数参数为wxString，意义为path
+	 * 这个path会被解析，
+	 * 如果解析失败，那么IV_ImgManager的getStatus()返回ILLEGAL_PATH
+	 * 如果解析成功且解析为文件夹，默认currentImage为该文件夹中根据自有匹配机制匹配到的第一个图片（注意文件夹里不存在匹配图片的情况）
+	 * 如果解析成功且解析为文件，则检查从文件名来看是否符合匹配格式：那么IV_ImgManager的getStatus()返回ILLEGAL_PATH；若是，尝试加载
+	 * 此时还不能使用switch2Next()和switch2Last()两个函数，hasLastImage()和hasNextImage()也都会返回false
+	 * 要想使用以上函数，需要调用preload()函数（这个函数名没取好，不够形象）
+	*/
+	enum STATUS{
+		ILLEGAL_PATH,
+		EMPTY_DIR,
+		FINE
+	};
+
+	IV_ImgManager(wxString path);
+	~IV_ImgManager();
+	bool hasLastImage();
+	bool hasNextImage();
+	const enum STATUS getStatus();
+	const wxString getPath();	//返回初始化时的地址
+	IV_Image& getCurrentImage();
+	void switch2Next();
+	void switch2Last();
+	void preload();	//preload函数要尽量地小，避免一次占用过多时间造成卡顿
+private:
+	IV_Image *imgTMP;
+};
