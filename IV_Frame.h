@@ -28,7 +28,7 @@ public:
     // constructor(s)
     IV_Frame();
     IV_Frame(const wxString path);
-    virtual ~IV_Frame();
+
 	//不能直接写析构函数，这会覆盖掉父类的析构函数，而应该通过onClose()来解决(网上这么说，但是为什么呢)
     // event handlers (these functions should _not_ be virtual)
 	void OnClose(wxCloseEvent& event);

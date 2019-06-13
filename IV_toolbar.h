@@ -16,7 +16,7 @@ public:
 	IV_toolbar(wxFrame *parent);
 	void OnClick(wxMouseEvent &event);
 	void OnMove(wxMouseEvent &event);
-	void OnPaint(wxMemoryDC &memDC);
+	void paint2cache(wxMemoryDC &memDC);
 private:
 	wxFrame *parent;
 	bool isHovered;

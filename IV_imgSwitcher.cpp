@@ -11,6 +11,6 @@ void IV_imgSwitcher::OnClick(wxMouseEvent &event){
 void IV_imgSwitcher::OnMove(wxMouseEvent &event){
 	//TO DO
 }
-void IV_imgSwitcher::OnPaint(wxMemoryDC &memDC){
+void IV_imgSwitcher::paint2cache(wxMemoryDC &memDC){
 	//TO DO
 }

@@ -18,7 +18,7 @@ public:
 	IV_imgSwitcher(wxFrame *parent);
 	void OnClick(wxMouseEvent &event);
 	void OnMove(wxMouseEvent &event);
-	void OnPaint(wxMemoryDC &memDC);
+	void paint2cache(wxMemoryDC &memDC);
 private:
 	wxFrame *parent;
 	bool isHovered;

@@ -20,9 +20,8 @@
 class IV_Image {
 public:
 	IV_Image(wxString path);
-	virtual  ~IV_Image();
 	imageAdapter m_imageAdapter;
-	void paint(wxMemoryDC &memDC);
+	void paint2cache(wxMemoryDC &memDC);
 	//注意方所函数需要考虑镜像、旋转、放缩、中心的问题，所以不要直接控制image内部的属性来调用
 	void zoomBy(double delta_zoom,wxPoint zoomed_dcenter);	//这个zoomed_dcenter名字没取好，它的意思本来是在canvas上缩放中心和实际中心（也就是center渲染到的那个点的距离）
 	void zoomTo(double zoom_new,wxPoint zoom_center);

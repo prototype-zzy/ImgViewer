@@ -24,10 +24,10 @@ enum
 // simple menu events like this the static method is much simpler.
 wxBEGIN_EVENT_TABLE(IV_Frame, wxFrame)
 	EVT_CLOSE(IV_Frame::OnClose)
-	EVT_SIZE(IV_Frame::OnResize)
-    EVT_PAINT(IV_Frame::OnPaint)
-
-    EVT_MENU(Minimal_About, IV_Frame::OnAbout)
+//	EVT_SIZE(IV_Frame::OnResize)
+//    EVT_PAINT(IV_Frame::paint2cache)
+//
+//    EVT_MENU(Minimal_About, IV_Frame::OnAbout)
 wxEND_EVENT_TABLE()
 
 
@@ -171,7 +171,29 @@ void IV_Frame::refresh() {
 	if(mode==MODE::GUIDE){
 
 	}else{
-
+//		wxLogMessage("123");
+////		wxBitmap abc(300,300);
+////		wxMemoryDC memDC(abc);
+////		memDC.SetPen(*wxGREEN_PEN);
+////		memDC.DrawLine(0,0,200,200);
+////		memDC.Clear();
+////		switch(imgManager->getStatus()){
+////			case IV_ImgManager::STATUS::FINE:
+////				if(imgManager->getCurrentImage().m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
+////					imgManager->getCurrentImage().paint2cache(memDC);
+////				}else{
+////
+////				}
+////				break;
+////			case IV_ImgManager::STATUS::EMPTY_DIR:
+////				break;
+////			case IV_ImgManager::STATUS::ILLEGAL_PATH:
+////				break;
+////		}
+//		wxClientDC dc(this);
+//		dc.SetPen(wxPen(*wxYELLOW, 20));
+//		dc.DrawPoint(30,30);
+//		dc.SetPen(wxNullPen);
 	}
 }
 

@@ -11,7 +11,7 @@ IV_Image::IV_Image(wxString path):m_imageAdapter(path){
 	}
 }
 //按理说是需要有zoom，rotate，mirror的功能的。但是这几个功能交杂在一起,目前就只实现zoom功能了，反正接口留着，之后再回来补
-void IV_Image::paint(wxMemoryDC &memDC){
+void IV_Image::paint2cache(wxMemoryDC &memDC){
 	memDC.SetUserScale(zoom,zoom);
 	memDC.DrawBitmap
 		(
