@@ -43,6 +43,7 @@ IV_Frame::IV_Frame()
 	// set the frame icon
 	SetIcon(wxICON(sample));
 	//set to guide mode
+	SetMinClientSize(wxSize(300,200));
 	mode=GUIDE;
 	imgManager= nullptr;
 }
@@ -63,14 +64,15 @@ void IV_Frame::OnPaint(wxPaintEvent &event) {
 	wxPaintDC paintDC(this);
 	if(imgManager->getStatus()==IV_ImgManager::STATUS::FINE){
 		if(imgManager->getCurrentImage().m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
+			paintDC.DrawText(wxString("123"),wxPoint(0,0));
 			imgManager->getCurrentImage().paint(paintDC);
 			toolbar.paint(paintDC);
 			imgSwitcher.paint(paintDC);
 		}else{
-			paintDC.DrawText(wxString("略略略"),wxPoint(0,0));
+			paintDC.DrawText(wxString("teriri"),wxPoint(0,0));
 		}
 	}else{
-		paintDC.DrawText(wxString("略略略"),wxPoint(0,0));
+		paintDC.DrawText(wxString("terirri"),wxPoint(0,0));
 	}
 }
 
