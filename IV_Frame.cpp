@@ -47,14 +47,8 @@ IV_Frame::IV_Frame()
 	imgManager= nullptr;
 }
 IV_Frame::IV_Frame(const wxString path)
-		: wxFrame(NULL, wxID_ANY,path),
-		  toolbar(this),
-		  imgSwitcher(this)
+		: IV_Frame()
 {
-	// set the frame icon
-	SetIcon(wxICON(sample));
-	//set to image mode  and initialize
-	mode=GUIDE;
 	OpenFile(path);
 }
 
@@ -146,7 +140,6 @@ void IV_Frame::OpenFile(wxString path){
 		if(imgManager!= nullptr){
 			delete imgManager;
 			imgManager= nullptr;
-
 		}
 		imgManager=imgManagerTMP;
 		mode=MODE::IMAGE;
