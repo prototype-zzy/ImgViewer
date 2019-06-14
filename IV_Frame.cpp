@@ -10,9 +10,9 @@
 
 enum
 {
-    // menu items
-            Minimal_Quit = wxID_EXIT,
-            Minimal_About = wxID_ABOUT
+	// menu items
+			Minimal_Quit = wxID_EXIT,
+	Minimal_About = wxID_ABOUT
 };
 
 // ----------------------------------------------------------------------------
@@ -23,9 +23,8 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 wxBEGIN_EVENT_TABLE(IV_Frame, wxFrame)
-	EVT_CLOSE(IV_Frame::OnClose)
-	EVT_SIZE(IV_Frame::OnResize)
-    EVT_PAINT(IV_Frame::OnPaint)
+				EVT_CLOSE(IV_Frame::OnClose)
+				EVT_PAINT(IV_Frame::OnPaint)
 //
 //    EVT_MENU(Minimal_About, IV_Frame::OnAbout)
 wxEND_EVENT_TABLE()
@@ -37,31 +36,27 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 IV_Frame::IV_Frame()
-        : wxFrame(NULL, wxID_ANY,"ImageViewer"),
+		: wxFrame(NULL, wxID_ANY,"ImageViewer"),
 		  toolbar(this),
 		  imgSwitcher(this)
 {
-    // set the frame icon
-    SetIcon(wxICON(sample));
-    //set to guide mode
-    mode=GUIDE;
-    imgManager= nullptr;
-    screenCache=new wxBitmap(GetClientSize(),32);
-	refresh();
+	// set the frame icon
+	SetIcon(wxICON(sample));
+	//set to guide mode
+	mode=GUIDE;
+	imgManager= nullptr;
 }
 IV_Frame::IV_Frame(const wxString path)
-        : wxFrame(NULL, wxID_ANY,path),
+		: wxFrame(NULL, wxID_ANY,path),
 		  toolbar(this),
 		  imgSwitcher(this)
 {
-    // set the frame icon
-    SetIcon(wxICON(sample));
-    //set to image mode  and initialize
-    mode=IMAGE;
-    imgManager=new IV_ImgManager(path);
-    OpenFile(path);
-	screenCache=new wxBitmap(GetClientSize(),32);
-	refresh();
+	// set the frame icon
+	SetIcon(wxICON(sample));
+	//set to image mode  and initialize
+	mode=IMAGE;
+	imgManager=new IV_ImgManager(path);
+	OpenFile(path);
 }
 
 // event handlers
@@ -69,27 +64,16 @@ void IV_Frame::OnClose(wxCloseEvent &event){
 	if(imgManager!= nullptr){
 		delete imgManager;
 	}
-	if(screenCache!= nullptr){
-		delete screenCache;
-	}
 	Destroy();
 }
-void IV_Frame::OnResize(wxSizeEvent &event){
-	delete screenCache;
-	screenCache=new wxBitmap(GetClientSize(),32);
-	refresh();
-}
 void IV_Frame::OnPaint(wxPaintEvent &event) {
-//	wxPaintDC dc(this);
-//	dc.SetPen(*wxYELLOW_PEN);
-//	dc.Clear();
-//	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);
-	wxClientDC dc(this);
+	/*wxClientDC dc(this);
 	dc.SetPen(*wxYELLOW_PEN);
 	dc.Clear();
-	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);
+	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);*/
 
 
+//	refresh();
 //    wxPaintDC paintDC(this);
 //    paintDC.Clear();
 //    paintDC.DrawBitmap(*screenCache,0,0,false);
@@ -110,7 +94,6 @@ void IV_Frame::OnCloseFile(wxCommandEvent &event) {
 		delete imgManager;
 	}
 	mode=GUIDE;
-	refresh();
 }
 void IV_Frame::OnMouseScroll(wxMouseEvent& event){
 	if(mode==GUIDE){
@@ -142,17 +125,17 @@ void IV_Frame::OnKeyboard(wxKeyEvent& event){
 void IV_Frame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
 
-    wxMessageBox(wxString::Format
-                         (
-                                 "Image Viewer\n"
-                                 "Powered by %s!,\n"
-                                 "Under %s.\n",
-                                 wxVERSION_STRING,
-                                 wxGetOsDescription()
-                         ),
-                 "About  ImgViewer",
-                 wxOK | wxICON_INFORMATION,
-                 this);
+	wxMessageBox(wxString::Format
+						 (
+								 "Image Viewer\n"
+								 "Powered by %s!,\n"
+								 "Under %s.\n",
+								 wxVERSION_STRING,
+								 wxGetOsDescription()
+						 ),
+				 "About  ImgViewer",
+				 wxOK | wxICON_INFORMATION,
+				 this);
 }
 
 //私有方法
@@ -166,7 +149,6 @@ void IV_Frame::OpenFile(wxString path){
 		}
 		imgManager=imgManagerTMP;
 		mode=MODE::IMAGE;
-		refresh();
 	}else{
 		wxLogError("Fail to open directory %s",path);
 		delete imgManagerTMP;
@@ -176,30 +158,5 @@ void IV_Frame::CloseFile(){
 	if(imgManager!= nullptr){
 		delete imgManager;
 		imgManager= nullptr;
-	}
-}
-void IV_Frame::refresh() {
-	if(mode==MODE::GUIDE){
-
-	}else {
-		//wxLogMessage("123");
-////		wxBitmap abc(300,300);
-////		wxMemoryDC memDC(abc);
-////		memDC.SetPen(*wxGREEN_PEN);
-////		memDC.DrawLine(0,0,200,200);
-////		memDC.Clear();
-////		switch(imgManager->getStatus()){
-////			case IV_ImgManager::STATUS::FINE:
-////				if(imgManager->getCurrentImage().m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
-////					imgManager->getCurrentImage().paint2cache(memDC);
-////				}else{
-////
-////				}
-////				break;
-////			case IV_ImgManager::STATUS::EMPTY_DIR:
-////				break;
-////			case IV_ImgManager::STATUS::ILLEGAL_PATH:
-////				break;
-////		}
 	}
 }

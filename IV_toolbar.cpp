@@ -17,7 +17,7 @@ void IV_toolbar::OnMove(wxMouseEvent &event){
 	 * 	若为假，则将buttonHovered置NONE
 	*/
 }
-void IV_toolbar::paint2cache(wxMemoryDC &memDC){
+void IV_toolbar::paint(wxPaintDC &paintDC){
 	//isHovered和buttonHovered进行绘图
 	//颜色别太有特色，50%灰度的#000不错
 }
