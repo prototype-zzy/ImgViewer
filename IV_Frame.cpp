@@ -54,8 +54,7 @@ IV_Frame::IV_Frame(const wxString path)
 	// set the frame icon
 	SetIcon(wxICON(sample));
 	//set to image mode  and initialize
-	mode=IMAGE;
-	imgManager=new IV_ImgManager(path);
+	mode=GUIDE;
 	OpenFile(path);
 }
 
@@ -67,16 +66,18 @@ void IV_Frame::OnClose(wxCloseEvent &event){
 	Destroy();
 }
 void IV_Frame::OnPaint(wxPaintEvent &event) {
-	/*wxClientDC dc(this);
-	dc.SetPen(*wxYELLOW_PEN);
-	dc.Clear();
-	dc.DrawLine(0,0,GetClientSize().x,GetClientSize().y);*/
-
-
-//	refresh();
-//    wxPaintDC paintDC(this);
-//    paintDC.Clear();
-//    paintDC.DrawBitmap(*screenCache,0,0,false);
+	wxPaintDC paintDC(this);
+	if(imgManager->getStatus()==IV_ImgManager::STATUS::FINE){
+		if(imgManager->getCurrentImage().m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
+			imgManager->getCurrentImage().paint(paintDC);
+			toolbar.paint(paintDC);
+			imgSwitcher.paint(paintDC);
+		}else{
+			paintDC.DrawText(wxString("略略略"),wxPoint(0,0));
+		}
+	}else{
+		paintDC.DrawText(wxString("略略略"),wxPoint(0,0));
+	}
 }
 
 void IV_Frame::OnOpenFile(wxCommandEvent &event) {
