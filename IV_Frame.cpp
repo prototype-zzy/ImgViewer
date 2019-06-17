@@ -11,7 +11,7 @@
 enum
 {
 	// menu items
-			Minimal_Quit = wxID_EXIT,
+	Minimal_Quit = wxID_EXIT,
 	Minimal_About = wxID_ABOUT
 };
 
@@ -23,9 +23,11 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 wxBEGIN_EVENT_TABLE(IV_Frame, wxFrame)
-				EVT_CLOSE(IV_Frame::OnClose)
-				EVT_PAINT(IV_Frame::OnPaint)
-//
+	EVT_CLOSE(IV_Frame::OnClose)
+	EVT_PAINT(IV_Frame::OnPaint)
+	EVT_SIZE(IV_Frame::OnResize)
+	EVT_MOTION(IV_Frame::OnMove)
+	EVT_LEFT_UP(IV_Frame::OnMouseClick)
 //    EVT_MENU(Minimal_About, IV_Frame::OnAbout)
 wxEND_EVENT_TABLE()
 
@@ -33,7 +35,6 @@ wxEND_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // main frame
 // ----------------------------------------------------------------------------
-
 // frame constructor
 IV_Frame::IV_Frame()
 		: wxFrame(NULL, wxID_ANY,"ImageViewer"),
@@ -43,9 +44,10 @@ IV_Frame::IV_Frame()
 	// set the frame icon
 	SetIcon(wxICON(sample));
 	//set to guide mode
-	SetMinClientSize(wxSize(300,200));
+	SetMinClientSize(wxSize(448,200));
 	mode=GUIDE;
 	imgManager= nullptr;
+	
 }
 IV_Frame::IV_Frame(const wxString path)
 		: IV_Frame()
@@ -60,19 +62,23 @@ void IV_Frame::OnClose(wxCloseEvent &event){
 	}
 	Destroy();
 }
+void IV_Frame::OnResize(wxSizeEvent &event) {
+	Refresh();
+}
 void IV_Frame::OnPaint(wxPaintEvent &event) {
+	
 	wxPaintDC paintDC(this);
+	
 	if(imgManager->getStatus()==IV_ImgManager::STATUS::FINE){
 		if(imgManager->getCurrentImage().m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
-			paintDC.DrawText(wxString("123"),wxPoint(0,0));
 			imgManager->getCurrentImage().paint(paintDC);
 			toolbar.paint(paintDC);
 			imgSwitcher.paint(paintDC);
 		}else{
-			paintDC.DrawText(wxString("teriri"),wxPoint(0,0));
+			paintDC.DrawText(wxString("lueluelue"),wxPoint(0,0));
 		}
 	}else{
-		paintDC.DrawText(wxString("terirri"),wxPoint(0,0));
+		paintDC.DrawText(wxString("lueluelue"),wxPoint(0,0));
 	}
 }
 
@@ -109,7 +115,8 @@ void IV_Frame::OnMouseClick(wxMouseEvent& event){
 	if(mode==MODE::GUIDE){
 
 	}else if(mode==MODE::IMAGE){
-
+		toolbar.OnClick(event,*imgManager);
+		imgSwitcher.OnClick(event,*imgManager);
 	}
 }
 void IV_Frame::OnKeyboard(wxKeyEvent& event){
@@ -134,24 +141,31 @@ void IV_Frame::OnAbout(wxCommandEvent& WXUNUSED(event))
 				 wxOK | wxICON_INFORMATION,
 				 this);
 }
+void IV_Frame::OnMove(wxMouseEvent &event) {
+	if (IsActive()) {
+		toolbar.OnMove(event);
+		imgSwitcher.OnMove(event);
+	}
+}
 
 //私有方法
 void IV_Frame::OpenFile(wxString path){
-	IV_ImgManager *imgManagerTMP=new IV_ImgManager(path);
-	if(imgManagerTMP->getStatus()==IV_ImgManager::STATUS::FINE){
-		if(imgManager!= nullptr){
+	IV_ImgManager *imgManagerTMP = new IV_ImgManager(path);
+	if(imgManagerTMP->getStatus() == IV_ImgManager::STATUS::FINE){
+		if(imgManager != nullptr){
 			delete imgManager;
-			imgManager= nullptr;
+			imgManager = nullptr;
 		}
-		imgManager=imgManagerTMP;
-		mode=MODE::IMAGE;
+		imgManager = imgManagerTMP;
+		mode = MODE::IMAGE;
+		SetTitle("ImageViewer   " + imgManager->getFileName());
 	}else{
 		wxLogError("Fail to open directory %s",path);
 		delete imgManagerTMP;
 	}
 }
 void IV_Frame::CloseFile(){
-	if(imgManager!= nullptr){
+	if(imgManager != nullptr){
 		delete imgManager;
 		imgManager= nullptr;
 	}

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "wx/wxprec.h"
-
+#include "wx/dir.h"
+#include "wx/filefn.h" 
+#include "wx/filename.h"
+#include "wx/vector.h"
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -40,14 +43,28 @@ public:
 
 	IV_ImgManager(wxString path);
 	~IV_ImgManager();
-	bool hasLastImage();
-	bool hasNextImage();
+	bool hasLastImage();//弃用
+	bool hasNextImage();//弃用
 	const enum STATUS getStatus();
 	const wxString getPath();	//返回初始化时的地址
 	IV_Image& getCurrentImage();
 	void switch2Next();
 	void switch2Last();
-	void preload();	//preload函数要尽量地小，避免一次占用过多时间造成卡顿
+	void preload();	
+	wxString getFileName();
 private:
 	IV_Image *imgTMP;
+
+	STATUS state;
+	wxString fileName;//仅文件名(带后缀)
+	wxString filePath;//仅路径
+	wxString fullName;//全路径加文件名
+	wxString nextFile;//全路径加文件名
+	wxString lastFile;//同上
+	wxString fileExt;//后缀（自动转换为小写）
+	wxVector<wxString> fileList;
+
+	bool setFileList(wxString path);     //创建目标目录下的文件名列表  
+	bool setNextAndLast();    //创建当前图片的上一张、下一张              
+	wxString judgeSuffix(wxString name);         //判断后缀是否为图片（参数为全路径+文件名）,不是则返回""                
 };

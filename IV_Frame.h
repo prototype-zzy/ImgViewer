@@ -43,6 +43,7 @@ public:
 	void OnKeyboard(wxKeyEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnMove(wxMouseEvent& event);
 	// any class wishing to process wxWidgets events must use this macro
 wxDECLARE_EVENT_TABLE();
 private:

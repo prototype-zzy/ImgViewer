@@ -10,31 +10,26 @@ IV_Image::IV_Image(wxString path):m_imageAdapter(path){
 		center.y=m_imageAdapter.getBitmap().GetSize().y/2;
 	}
 }
-//æŒ‰ç†è¯´æ˜¯éœ€è¦æœ‰zoomï¼Œrotateï¼Œmirrorçš„åŠŸèƒ½çš„ã€‚ä½†æ˜¯è¿™å‡ ä¸ªåŠŸèƒ½äº¤æ‚åœ¨ä¸€èµ·,ç›®å‰å°±åªå®ç°zoomåŠŸèƒ½äº†ï¼Œåæ­£æ¥å£ç•™ç€ï¼Œä¹‹åå†å›æ¥è¡¥
+//°´ÀíËµÊÇĞèÒªÓĞzoom£¬rotate£¬mirrorµÄ¹¦ÄÜµÄ¡£µ«ÊÇÕâ¼¸¸ö¹¦ÄÜ½»ÔÓÔÚÒ»Æğ,Ä¿Ç°¾ÍÖ»ÊµÏÖzoom¹¦ÄÜÁË£¬·´Õı½Ó¿ÚÁô×Å£¬Ö®ºóÔÙ»ØÀ´²¹
 void IV_Image::paint(wxPaintDC &paintDC){
-	if(m_imageAdapter.getImgType()!=imageAdapter::IMG_TYPE::FAILED){
-		paintDC.SetUserScale(zoom,zoom);
-		paintDC.DrawText(wxString("wo jiu he ni hei hei hei"),wxPoint(0,0));
-		paintDC.DrawBitmap
-				(
-						m_imageAdapter.getBitmap(),
-						paintDC.DeviceToLogicalX(paintDC.GetSize().x/2-zoom*center.x),
-						paintDC.DeviceToLogicalY(paintDC.GetSize().y/2-zoom*center.y),
-						true
-				);
-		paintDC.SetUserScale(1,1);
-	}else{
-		paintDC.DrawText(wxString("pic load failed"),wxPoint(0,0));
-	}
+	paintDC.SetUserScale(zoom,zoom);
+	paintDC.DrawBitmap
+		(
+			m_imageAdapter.getBitmap(),
+			paintDC.DeviceToLogicalX(paintDC.GetSize().x/2-zoom*center.x),
+			paintDC.DeviceToLogicalY(paintDC.GetSize().y/2-zoom*center.y),
+			true
+		);
+	paintDC.SetUserScale(1, 1);
 
 }
-//ç°åœ¨è¿™äº›æ–¹æ³•éƒ½è¿˜æ˜¯ç©ºçš„
-void IV_Image::zoomBy(double delta_zoom,wxPoint zoomed_dcenter){}	//è¿™ä¸ªzoomed_dcenteråå­—æ²¡å–å¥½ï¼Œå®ƒçš„æ„æ€æœ¬æ¥æ˜¯åœ¨canvasä¸Šç¼©æ”¾ä¸­å¿ƒ(ä¸€èˆ¬æ˜¯é¼ æ ‡æŒ‡å‘çš„ç‚¹)å’Œå®é™…ä¸­å¿ƒï¼ˆä¹Ÿå°±æ˜¯centeræ¸²æŸ“åˆ°çš„é‚£ä¸ªç‚¹çš„è·ç¦»ï¼‰
+//ÏÖÔÚÕâĞ©·½·¨¶¼»¹ÊÇ¿ÕµÄ
+void IV_Image::zoomBy(double delta_zoom,wxPoint zoomed_dcenter){}	//Õâ¸özoomed_dcenterÃû×ÖÃ»È¡ºÃ£¬ËüµÄÒâË¼±¾À´ÊÇÔÚcanvasÉÏËõ·ÅÖĞĞÄ(Ò»°ãÊÇÊó±êÖ¸ÏòµÄµã)ºÍÊµ¼ÊÖĞĞÄ£¨Ò²¾ÍÊÇcenteräÖÈ¾µ½µÄÄÇ¸öµãµÄ¾àÀë£©
 void IV_Image::zoomTo(double zoom_new,wxPoint zoom_center){}
 void IV_Image::zoom100(wxSize canvasSize){}
-void IV_Image::rotate(bool CLOCKWISEorAnti){}	//trueä»£è¡¨é¡ºæ—¶é’ˆæ—‹è½¬90åº¦ï¼Œfalseä»£è¡¨é€†æ—¶é’ˆæ—‹è½¬90åº¦
+void IV_Image::rotate(bool CLOCKWISEorAnti){}	//true´ú±íË³Ê±ÕëĞı×ª90¶È£¬false´ú±íÄæÊ±ÕëĞı×ª90¶È
 void IV_Image::mirror(bool HORIZONTALorVertical){}
-void IV_Image::switchImage(bool NEXTorLast){}	//trueä»£è¡¨åˆ‡åˆ°ä¸‹ä¸€å¼ ï¼Œfalseä»£è¡¨åˆ‡åˆ°ä¸Šä¸€å¼ 
+void IV_Image::switchImage(bool NEXTorLast){}	//true´ú±íÇĞµ½ÏÂÒ»ÕÅ£¬false´ú±íÇĞµ½ÉÏÒ»ÕÅ
 double IV_Image::getZoom(){
 	return zoom;
 }
